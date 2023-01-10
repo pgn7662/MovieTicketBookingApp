@@ -1,2 +1,6 @@
-package PACKAGE_NAME;public class Admin {
+public class Admin extends User{
+
+    public Admin() {
+        super("admin","admin");
+    }
 }
