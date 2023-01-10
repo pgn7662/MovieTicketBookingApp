@@ -32,5 +32,15 @@ public class Screen {
         }
     }
 
-    
+    public HashMap<LocalDate, ArrayList<Show>> getShowsPerDay() {
+        return showsPerDay;
+    }
+
+    public String getScreenName() {
+        return screenName;
+    }
+
+    public void addShow(LocalDate date,ArrayList<Show> shows,Admin admin){
+        showsPerDay.put(date,shows);
+    }
 }

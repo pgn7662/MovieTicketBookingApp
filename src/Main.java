@@ -1,5 +1,10 @@
+import java.time.LocalTime;
+import java.util.Date;
+
 public class Main {
     public static void main(String[] args) {
-        Screen screen = new Screen("XOLO",14,12);
+        Input input = new Input();
+        LocalTime time = input.getTime();
+        System.out.println(time);
     }
 }
