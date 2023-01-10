@@ -1,5 +1,10 @@
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -215,6 +220,32 @@ public class Input {
                     System.out.println(i.ordinal()+1+" "+i.name());
                 System.out.print("Enter a valid dimension from the list:");
             }
+        }
+    }
+
+    public LocalTime getTime()  {
+        System.out.print("Enter the hour(0 - 23):");
+        int hour = getHour();
+        System.out.print("Enter the minute (0 - 59):");
+        int minute = getMinute();
+        return LocalTime.of(hour,minute);
+    }
+
+    public int getHour(){
+        while (true){
+            int hour = getInteger();
+            if(hour> -1 && hour< 24)
+                return hour;
+            System.out.print("Enter a valid hour (0 - 23):");
+        }
+    }
+
+    public int getMinute(){
+        while (true){
+            int minute  = getInteger();
+            if(minute > -1 && minute < 60)
+                return minute;
+            System.out.print("Enter a valid minute (0-59):");
         }
     }
 

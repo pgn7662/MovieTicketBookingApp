@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class AdminMenu {
@@ -6,6 +7,7 @@ public class AdminMenu {
     public void displayAdminMenu(Database database,MovieTicketBookingApp app,Admin admin){
         System.out.println("Enter 1 to add a Theatre");
         System.out.println("Enter 2 to add a Movie");
+        System.out.println("Enter 3 to add a movie to theatre");
         System.out.println("Enter 3 to remove a Theatre");
         System.out.println("Enter 4 to remove a Movie");
         System.out.println("Enter 5 to edit a movie");
@@ -14,6 +16,27 @@ public class AdminMenu {
         switch (input.getInteger()){
             case 1 -> {
 
+            }
+            case 3 ->{
+                while (true){
+                    System.out.println("Enter 1 to select movie");
+                    System.out.println("Enter any other number to return");
+                    if (input.getInteger() == 1) {
+                        System.out.print("Enter the movie name to search:");
+                        String movieName = input.getString();
+                        Movie selectedMovie = app.getMovieFromList(app.getMatchingMovies(movieName));
+                        System.out.println("Enter 1 to select the theatre");
+                        System.out.println("Enter any other number to search movie again");
+                        if (input.getInteger() == 1) {
+                            System.out.print("Enter the theatre name to search:");
+                            String theatreName = input.getString();
+                            Theatre selectedTheatre = app.getTheatreFromList(app.getMatchingTheatres(theatreName));
+                            addMovieToShow(selectedTheatre, selectedMovie, admin);
+                        }
+                    }
+                    else
+                        break;
+                }
             }
         }
     }
@@ -78,5 +101,37 @@ public class AdminMenu {
         DimensionType dimensionType = input.getDimensionType();
         Movie movie = new Movie(movieName,casts,crews,movieGenre,certificate,language,dimensionType,releaseDate,totalDuration);
         database.addMovie(movie,admin);
+    }
+
+    private void addMovieToShow(Theatre selectedTheatre,Movie selectedMovie,Admin admin) {
+//      loop1: while (true){
+//              for (int counter = 0; counter < selectedTheatre.getNumberOfScreens(); counter++) {
+//                  System.out.println((counter + 1) + " " + selectedTheatre.getScreens().get(counter).getScreenName());
+//              }
+//              System.out.print("Enter the serial number to select the screen: ");
+//              Screen selectedScreen;
+//              while (true) {
+//                  int index = input.getInteger() - 1;
+//                  if (index < selectedTheatre.getNumberOfScreens() && index >= 0) {
+//                      selectedScreen = selectedTheatre.getScreens().get(index);
+//                      break;
+//                  } else
+//                      System.out.print("Enter a valid serial number from the above list:");
+//              }
+//              while (true) {
+//                  LocalDate date = selectedMovie.getReleaseDate();
+//                  System.out.print("Enter the show timing for the selected movie on " + date + ":");
+//                  LocalTime showTime = input.getTime();
+//              }
+//          }
+    }
+
+    private boolean checkTimeAvailability(LocalTime showTime,Movie movie,Screen screen,LocalDate showDate){
+        boolean isShowTimeAvailable = false;
+        for(Show show:screen.getShowsPerDay().get(showDate)) {
+            if(show.getStartTime().plusMinutes(show.getIntermissionTime()+15+movie.getTotalDuration()).isAfter(showTime))
+                isShowTimeAvailable = true;
+        }
+        return isShowTimeAvailable;
     }
 }

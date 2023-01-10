@@ -2,6 +2,7 @@ import java.util.ArrayList;
 
 public class MovieTicketBookingApp {
     Input input = new Input();
+    Database database;
     public Movie getMovieFromList(ArrayList<Movie> movieList){
         Movie selectedMovie = null;
         if(movieList.size() == 0)
@@ -46,5 +47,22 @@ public class MovieTicketBookingApp {
         return selectedTheatre;
     }
 
+    public ArrayList<Movie> getMatchingMovies(String movieName){
+        ArrayList<Movie> searchedMovies = new ArrayList<>();
+        for(Movie checkedMovies : database.getMovieList()){
+            if(checkedMovies.getMovieName().contains(movieName))
+                searchedMovies.add(checkedMovies);
+        }
+        return  searchedMovies;
+    }
+
+    public ArrayList<Theatre> getMatchingTheatres(String theatreName){
+        ArrayList<Theatre> searchedTheatres = new ArrayList<>();
+        for(Theatre checkedTheatre : database.getTheatreList()){
+            if(checkedTheatre.getName().contains(theatreName))
+                searchedTheatres.add(checkedTheatre);
+        }
+        return  searchedTheatres;
+    }
 
 }
