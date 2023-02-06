@@ -5,15 +5,50 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="275824d4-97f3-478c-8248-f3a74268f4b2" name="Changes" comment="UPDATE">
+      <change afterPath="$PROJECT_DIR$/src/application/AdminMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/application/CustomerMenu.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/application/MovieTicketBookingApp.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/library/Authenticator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/library/BookingController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/library/Database.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/library/IdGenerator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/library/InvalidBookingException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/library/InvalidDataException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/library/InvalidShowException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/library/Movie.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/library/Rating.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/library/Record.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/library/Retriever.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/library/SeatStatus.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/library/State.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/library/TicketStatus.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/AdminMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/AdminMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Genre.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Genre.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Input.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Input.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Address.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/library/Address.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Admin.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/library/Admin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AdminMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Authenticator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Certificate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/library/Certificate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/library/Customer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/CustomerMenu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Database.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DimensionType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/library/DimensionType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Genre.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/library/Genre.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Input.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/Input.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/InvalidName.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/library/InvalidName.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/InvalidNewPassword.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/library/InvalidNewPassword.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Language.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/library/Language.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/MovieTicketBookingApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MovieTicketBookingApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Screen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Screen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Show.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Show.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Ticket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Movie.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MovieTicketBookingApp.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/NameChecker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/library/NameChecker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/NewPasswordChecker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/library/NewPasswordChecker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Screen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/library/Screen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Seat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/library/Seat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/SeatStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Show.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/library/Show.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Theatre.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/library/Theatre.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Ticket.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/library/Ticket.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/library/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,8 +58,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Enum" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -38,6 +73,10 @@
   <component name="Git.Settings">
     <option name="UPDATE_TYPE" value="REBASE" />
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/library/Rating.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="jar://$USER_HOME$/Library/Java/JavaVirtualMachines/openjdk-18.0.2.1/Contents/Home/lib/src.zip!/java.base/java/util/ArrayList.java" root0="SKIP_INSPECTION" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -49,17 +88,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Users/gopi-pt6272/IdeaProjects/TicketBookingApp/src",
-    "settings.editor.selected.configurable": "inlay.hints"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/gopi-pt6272/Documents/Console App&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;inlay.hints&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="application" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="library" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -78,12 +126,40 @@
       <option name="project" value="LOCAL" />
       <updated>1673327353940</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="UPDATE">
+      <created>1673356551322</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1673356551322</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="UPDATE" />
     <option name="LAST_COMMIT_MESSAGE" value="UPDATE" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="java.lang.StackOverflowError" package="java.lang" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

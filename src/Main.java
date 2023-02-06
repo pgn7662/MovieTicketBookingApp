@@ -1,10 +1,8 @@
-import java.time.LocalTime;
-import java.util.Date;
+import application.MovieTicketBookingApp;
 
 public class Main {
     public static void main(String[] args) {
-        Input input = new Input();
-        LocalTime time = input.getTime();
-        System.out.println(time);
+        MovieTicketBookingApp app = new MovieTicketBookingApp();
+        app.displayMainMenu();
     }
 }

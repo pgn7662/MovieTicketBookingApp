@@ -1,5 +1,9 @@
+package library;
+
+import library.InvalidName;
+
 public class NameChecker {
-    public static void checkName(String name) throws InvalidName{
+    public static void checkName(String name) throws InvalidName {
         for(char i:name.toCharArray())
         {
             if(Character.isDigit(i))

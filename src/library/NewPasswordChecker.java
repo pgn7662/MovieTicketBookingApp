@@ -1,5 +1,9 @@
+package library;
+
+import library.InvalidNewPassword;
+
 public class NewPasswordChecker {
-        public static int findExceptionType(String password) throws InvalidNewPassword {
+        public static void findExceptionType(String password) throws InvalidNewPassword {
             if (!(password.length()>=8 && password.length()<=15))
                 throw new InvalidNewPassword(1);
             int numberOfLowerCaseCharacters = 0;
@@ -27,7 +31,6 @@ public class NewPasswordChecker {
                 throw new InvalidNewPassword(5);
             if(numberOfSpecialCharacters == 0)
                 throw new InvalidNewPassword(6);
-            return 0;
 
         }
         protected static String printMessage(int exceptionNumber) {

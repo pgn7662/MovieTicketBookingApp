@@ -1,3 +1,5 @@
+package library;
+
 public enum Genre {
     ACTION,
     COMEDY,
@@ -6,5 +8,7 @@ public enum Genre {
     HORROR,
     MYSTERY,
     ROMANCE,
+    SCI_FI,
     THRILLER,
+    ADVENTURE
 }

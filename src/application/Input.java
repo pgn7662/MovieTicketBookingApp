@@ -1,16 +1,20 @@
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+package application;
+
+import library.*;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public class Input {
-    Scanner s = new Scanner(System.in);
-    public int getInteger(){
+ class Input{
+    private final Scanner scanner;
+     Input() {
+        scanner = new Scanner(System.in);
+     }
+
+     int getInteger(){
         int number;
         while(true){
             try {
@@ -26,11 +30,11 @@ public class Input {
         }
     }
 
-    public String getString(){
-        return s.nextLine();
+     String getString(){
+        return scanner.nextLine();
     }
 
-    public long getLong() {
+     long getLong() {
         while(true)
         {
             try{
@@ -42,7 +46,7 @@ public class Input {
         }
     }
 
-    public long getPhoneNumber(){
+     long getPhoneNumber(){
         while (true) {
             String phoneNumber = getString();
             if(phoneNumber.length()==10)
@@ -57,7 +61,7 @@ public class Input {
         }
     }
 
-    public String getName(){
+     String getName(){
         while (true){
             try {
                 String name = getString();
@@ -71,7 +75,7 @@ public class Input {
         }
     }
 
-    public double getDouble(){
+     double getDouble(){
         while(true){
             try{
                 return Double.parseDouble(getString());
@@ -82,23 +86,18 @@ public class Input {
         }
     }
 
-    public LocalDate getDate(){
+     LocalDate getDate(){
         while (true){
             try {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                LocalDate date = LocalDate.parse(getString(),formatter);
-                if(LocalDate.now().isAfter(date) || LocalDate.now().isEqual(date)){
-                    return date;
-                }
-                else
-                    System.out.print("The date you entered is already over.\nPlease enter a valid date");
+                return LocalDate.parse(getString(), formatter);
             }
             catch (Exception e){
                 System.out.print("Enter the date in the correct format dd-mm-yyyy Example :01-01-2000:");
             }
         }
     }
-    public Genre getGenre()
+     Genre getGenre()
     {
         while(true)
         {
@@ -113,7 +112,7 @@ public class Input {
                 int c = 1;
                 for(Genre i:genres)
                 {
-                    System.out.print(i.ordinal()+1+" "+i.name()+"\t\t");
+                    System.out.print(i.name()+"\t   ");
                     if(c%3==0)
                         System.out.println();
                     c++;
@@ -123,7 +122,7 @@ public class Input {
         }
     }
 
-    public String getEmailId()
+     String getEmailId()
     {
         while(true)
         {
@@ -134,14 +133,14 @@ public class Input {
                 System.out.print("Enter a valid email address:");
         }
     }
-    public boolean isValidEmail(String emailId)
+     boolean isValidEmail(String emailId)
     {
         return Pattern.compile(("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"))
                 .matcher(emailId)
                 .matches();
     }
 
-    public long getPinCode(){
+     long getPinCode(){
         while (true){
             long pinCode = getLong();
             if ((pinCode + "").length() == 6)
@@ -151,25 +150,35 @@ public class Input {
         }
     }
 
-    public Address getAddress(){
+     Address getAddress(){
         System.out.print("Enter building number and name:");
         String buildingName = getString();
-        System.out.print("Enter the street name:");
-        String streetName = getString();
-        System.out.println("Enter the area/locality name");
+        System.out.print("Enter the area/locality name:");
         String areaName = getString();
-        System.out.print("Enter the landmark nearby:");
-        String landmark = getString();
         System.out.print("Enter the city:");
         String city = getString();
         System.out.print("Enter the pin code:");
         long pinCode = getPinCode();
         System.out.print("Enter the state:");
-        String state = getString();
-        return new Address(buildingName,streetName,areaName,landmark,city,pinCode,state);
+        State state = getState();
+        return new Address(buildingName,areaName,city,pinCode,state);
     }
 
-    public Certificate getCertificate(){
+     State getState(){
+        while (true){
+            State[] states = State.values();
+            String stateName = getString().toUpperCase().replaceAll(" ","_");
+            try{
+                return State.valueOf(stateName);
+            }
+            catch (Exception e){
+                for(State state: states)
+                    System.out.println(state.ordinal()+1+" "+state.name());
+                System.out.print("Enter a valid state name from the list:");
+            }
+        }
+    }
+     Certificate getCertificate(){
         while(true)
         {
             Certificate[] certificates = Certificate.values();
@@ -187,7 +196,7 @@ public class Input {
         }
     }
 
-    public Language getLanguage(){
+     Language getLanguage(){
         while(true)
         {
             Language[] languages = Language.values();
@@ -205,25 +214,22 @@ public class Input {
         }
     }
 
-    public DimensionType getDimensionType(){
+     DimensionType getDimensionType(){
         while(true)
         {
             DimensionType[] dimensionTypes = DimensionType.values();
-
-            try {
-                String dimension = getString().toUpperCase().trim().replace(" ","");
-                return DimensionType.valueOf(dimension);
+            String dimension = getString().toUpperCase();
+            for (DimensionType dimensionType : dimensionTypes) {
+                if (dimensionType.getDimension().equals(dimension))
+                    return dimensionType;
             }
-            catch(Exception e)
-            {
-                for(DimensionType i:dimensionTypes)
-                    System.out.println(i.ordinal()+1+" "+i.name());
-                System.out.print("Enter a valid dimension from the list:");
-            }
+            for(DimensionType i:dimensionTypes)
+                System.out.println(i.ordinal()+1+" "+i.getDimension());
+            System.out.print("Enter a valid dimension from the list:");
         }
     }
 
-    public LocalTime getTime()  {
+     LocalTime getTime()  {
         System.out.print("Enter the hour(0 - 23):");
         int hour = getHour();
         System.out.print("Enter the minute (0 - 59):");
@@ -231,7 +237,7 @@ public class Input {
         return LocalTime.of(hour,minute);
     }
 
-    public int getHour(){
+     int getHour(){
         while (true){
             int hour = getInteger();
             if(hour> -1 && hour< 24)
@@ -240,7 +246,7 @@ public class Input {
         }
     }
 
-    public int getMinute(){
+     int getMinute(){
         while (true){
             int minute  = getInteger();
             if(minute > -1 && minute < 60)
@@ -248,5 +254,100 @@ public class Input {
             System.out.print("Enter a valid minute (0-59):");
         }
     }
+     String getNewPassword()
+    {
+        while(true){
+            try{
+                String password = getString();
+                NewPasswordChecker.findExceptionType(password);
+                return password;
+            }
+            catch (InvalidNewPassword e) {
+                System.out.println(e.getMessage());
+                System.out.print("Enter a valid password:");
+            }
+        }
+    }
 
+     String getSeatNumber(){
+        while(true){
+            String seatNumber = getString().toUpperCase();
+            if(Character.isUpperCase(seatNumber.charAt(0)) && Character.isDigit(seatNumber.charAt(1)) && seatNumber.length() == 3 && Character.isDigit(seatNumber.charAt(2))) {
+                return seatNumber;
+            }
+            System.out.print("Enter a valid seat number in the format rowName ColumnNumber Eg - A11 :");
+        }
+    }
+
+     int getRating(){
+        while(true){
+            int rating = getInteger();
+            if(rating >= 1 && rating <= 10)
+                return rating;
+            System.out.print("Enter a valid rating between 1 to 10 :");
+        }
+    }
+
+     int getNumberOfSeats(){
+        while(true){
+            int numberOfSeats = getInteger();
+            if(numberOfSeats >= 1 && numberOfSeats <= 10)
+                return numberOfSeats;
+            System.out.print("The number of seats can be selected is 1 to 10\nEnter the number of seats:");
+        }
+    }
+
+     int getNumberOfRows(){
+        while(true){
+            int numberOfRows = getInteger();
+            if(numberOfRows >=6 && numberOfRows <= 26)
+                return numberOfRows;
+            System.out.print("The number of rows can be added is 6 to 26\nEnter the number of rows:");
+        }
+    }
+
+     int getNumberOfColumns(){
+        while(true){
+            int numberOfColumns = getInteger();
+            if(numberOfColumns >= 6  && numberOfColumns <= 50)
+                return numberOfColumns;
+            System.out.print("The number of columns can be added is 6 to 50\nEnter the number of columns:");
+        }
+    }
+
+     double getSeatCost(){
+        while(true){
+            double seatCost = getDouble();
+            if(seatCost >= 30  && seatCost <= 2000)
+                return seatCost;
+            System.out.print("The seat cost will be in the range Rs.30 to Rs.2000\nEnter the seat cost:");
+        }
+    }
+
+     int getIntermissionTime(){
+        while(true){
+            int intermissionTime = getInteger();
+            if(intermissionTime >= 0  && intermissionTime <= 25)
+                return intermissionTime;
+            System.out.print("The intermission time will be in the 0 to 25 minutes\nEnter the intermission time:");
+        }
+    }
+
+     int getNumberOfScreens(){
+        while(true){
+            int numberOfScreens = getInteger();
+            if(numberOfScreens > 0  && numberOfScreens <= 30)
+                return numberOfScreens;
+            System.out.print("The number of screens must be greater than 0 and less than 30\nEnter the number of screens:");
+        }
+    }
+
+    int getDurationOfMovie(){
+         while (true){
+             int numberOfScreens = getInteger();
+             if(numberOfScreens >= 50)
+                 return numberOfScreens;
+             System.out.print("Enter the duration of the movie above 50 minutes:");
+         }
+    }
 }
