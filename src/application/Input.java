@@ -28,11 +28,11 @@ import java.util.regex.Pattern;
                 System.out.print("Enter a valid number:");
             }
         }
-    }
+     }
 
      String getString(){
         return scanner.nextLine();
-    }
+     }
 
      long getLong() {
         while(true)
@@ -44,7 +44,7 @@ import java.util.regex.Pattern;
                 System.out.print("Enter a valid number:");
             }
         }
-    }
+     }
 
      long getPhoneNumber(){
         while (true) {
@@ -59,7 +59,8 @@ import java.util.regex.Pattern;
                 }
             }
         }
-    }
+     }
+
 
      String getName(){
         while (true){
@@ -73,7 +74,7 @@ import java.util.regex.Pattern;
                 System.out.print("Enter a valid name:");
             }
         }
-    }
+     }
 
      double getDouble(){
         while(true){
@@ -84,7 +85,7 @@ import java.util.regex.Pattern;
                 System.out.print("Enter a valid number:");
             }
         }
-    }
+     }
 
      LocalDate getDate(){
         while (true){
@@ -96,9 +97,8 @@ import java.util.regex.Pattern;
                 System.out.print("Enter the date in the correct format dd-mm-yyyy Example :01-01-2000:");
             }
         }
-    }
-     Genre getGenre()
-    {
+     }
+     Genre getGenre() {
         while(true)
         {
             Genre[] genres = Genre.values();
@@ -120,10 +120,9 @@ import java.util.regex.Pattern;
                 System.out.print("\nEnter a valid genre from the list:");
             }
         }
-    }
+     }
 
-     String getEmailId()
-    {
+    String getEmailId() {
         while(true)
         {
             String emailAddress = getString();
@@ -132,13 +131,13 @@ import java.util.regex.Pattern;
             else
                 System.out.print("Enter a valid email address:");
         }
-    }
-     boolean isValidEmail(String emailId)
-    {
+     }
+
+     boolean isValidEmail(String emailId) {
         return Pattern.compile(("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"))
                 .matcher(emailId)
                 .matches();
-    }
+     }
 
      long getPinCode(){
         while (true){
@@ -148,8 +147,7 @@ import java.util.regex.Pattern;
             else
                 System.out.print("Enter a valid pin code:");
         }
-    }
-
+     }
      Address getAddress(){
         System.out.print("Enter building number and name:");
         String buildingName = getString();
@@ -162,7 +160,7 @@ import java.util.regex.Pattern;
         System.out.print("Enter the state:");
         State state = getState();
         return new Address(buildingName,areaName,city,pinCode,state);
-    }
+     }
 
      State getState(){
         while (true){
@@ -177,7 +175,7 @@ import java.util.regex.Pattern;
                 System.out.print("Enter a valid state name from the list:");
             }
         }
-    }
+     }
      Certificate getCertificate(){
         while(true)
         {
@@ -194,7 +192,7 @@ import java.util.regex.Pattern;
                 System.out.print("Enter a valid certificate from the list:");
             }
         }
-    }
+     }
 
      Language getLanguage(){
         while(true)
@@ -212,7 +210,7 @@ import java.util.regex.Pattern;
                 System.out.print("Enter a valid language from the list:");
             }
         }
-    }
+     }
 
      DimensionType getDimensionType(){
         while(true)
@@ -227,7 +225,7 @@ import java.util.regex.Pattern;
                 System.out.println(i.ordinal()+1+" "+i.getDimension());
             System.out.print("Enter a valid dimension from the list:");
         }
-    }
+     }
 
      LocalTime getTime()  {
         System.out.print("Enter the hour(0 - 23):");
@@ -235,7 +233,7 @@ import java.util.regex.Pattern;
         System.out.print("Enter the minute (0 - 59):");
         int minute = getMinute();
         return LocalTime.of(hour,minute);
-    }
+     }
 
      int getHour(){
         while (true){
@@ -244,7 +242,7 @@ import java.util.regex.Pattern;
                 return hour;
             System.out.print("Enter a valid hour (0 - 23):");
         }
-    }
+     }
 
      int getMinute(){
         while (true){
@@ -253,9 +251,8 @@ import java.util.regex.Pattern;
                 return minute;
             System.out.print("Enter a valid minute (0-59):");
         }
-    }
-     String getNewPassword()
-    {
+     }
+     String getNewPassword() {
         while(true){
             try{
                 String password = getString();
@@ -267,17 +264,19 @@ import java.util.regex.Pattern;
                 System.out.print("Enter a valid password:");
             }
         }
-    }
+     }
 
      String getSeatNumber(){
         while(true){
             String seatNumber = getString().toUpperCase();
-            if(Character.isUpperCase(seatNumber.charAt(0)) && Character.isDigit(seatNumber.charAt(1)) && seatNumber.length() == 3 && Character.isDigit(seatNumber.charAt(2))) {
-                return seatNumber;
+            if(seatNumber.length() == 3){
+                if (Character.isUpperCase(seatNumber.charAt(0)) && Character.isDigit(seatNumber.charAt(1)) && Character.isDigit(seatNumber.charAt(2))) {
+                    return seatNumber;
+                }
             }
             System.out.print("Enter a valid seat number in the format rowName ColumnNumber Eg - A11 :");
         }
-    }
+     }
 
      int getRating(){
         while(true){
@@ -286,7 +285,7 @@ import java.util.regex.Pattern;
                 return rating;
             System.out.print("Enter a valid rating between 1 to 10 :");
         }
-    }
+     }
 
      int getNumberOfSeats(){
         while(true){
@@ -295,7 +294,7 @@ import java.util.regex.Pattern;
                 return numberOfSeats;
             System.out.print("The number of seats can be selected is 1 to 10\nEnter the number of seats:");
         }
-    }
+     }
 
      int getNumberOfRows(){
         while(true){
@@ -304,7 +303,7 @@ import java.util.regex.Pattern;
                 return numberOfRows;
             System.out.print("The number of rows can be added is 6 to 26\nEnter the number of rows:");
         }
-    }
+     }
 
      int getNumberOfColumns(){
         while(true){
@@ -313,7 +312,7 @@ import java.util.regex.Pattern;
                 return numberOfColumns;
             System.out.print("The number of columns can be added is 6 to 50\nEnter the number of columns:");
         }
-    }
+     }
 
      double getSeatCost(){
         while(true){
@@ -322,7 +321,7 @@ import java.util.regex.Pattern;
                 return seatCost;
             System.out.print("The seat cost will be in the range Rs.30 to Rs.2000\nEnter the seat cost:");
         }
-    }
+     }
 
      int getIntermissionTime(){
         while(true){
@@ -331,7 +330,7 @@ import java.util.regex.Pattern;
                 return intermissionTime;
             System.out.print("The intermission time will be in the 0 to 25 minutes\nEnter the intermission time:");
         }
-    }
+     }
 
      int getNumberOfScreens(){
         while(true){
@@ -340,7 +339,7 @@ import java.util.regex.Pattern;
                 return numberOfScreens;
             System.out.print("The number of screens must be greater than 0 and less than 30\nEnter the number of screens:");
         }
-    }
+     }
 
     int getDurationOfMovie(){
          while (true){
@@ -349,5 +348,5 @@ import java.util.regex.Pattern;
                  return numberOfScreens;
              System.out.print("Enter the duration of the movie above 50 minutes:");
          }
-    }
+     }
 }

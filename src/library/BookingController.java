@@ -18,7 +18,7 @@ public class BookingController {
 
     public void cancelTicket(int bookingId,Customer customer) throws InvalidBookingException{
         Ticket ticketToBeCancelled = customer.getTicket(bookingId);
-        if(ticketToBeCancelled.getShowTime().isAfter(LocalTime.now().plusHours(2)))
+        if(ticketToBeCancelled.getShowDate().equals(LocalDate.now()) && ticketToBeCancelled.getShowTime().isBefore(LocalTime.now().plusHours(2)))
             throw new InvalidBookingException("The ticket must be cancelled only 2 hours before the show time");
         Theatre theatreSelected = null;
         for(Theatre theatre: Retriever.getInstance().getTheatreList()) {

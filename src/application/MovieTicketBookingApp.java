@@ -77,11 +77,14 @@ public class MovieTicketBookingApp {
                 default -> System.out.println("Enter a valid choice");
             }
         }
-
     }
 
     protected String selectLocation(){
         int counter = 0;
+        if(Retriever.getInstance().getTheatreLocations().size() == 0) {
+            System.out.println("No Theatres available");
+            return null;
+        }
         for(String location : Retriever.getInstance().getTheatreLocations()){
             System.out.println(String.format("%2d",++counter)+" "+location.toUpperCase());
         }
@@ -115,7 +118,7 @@ public class MovieTicketBookingApp {
             int id = input.getInteger();
             Movie movie = Retriever.getInstance().getMovie(id);
             if (movie != null && searchedMovies.contains(movie))
-                return Retriever.getInstance().getMovie(id);
+                return movie;
             else
                 System.out.print("Enter a valid number from the above list: ");
         }
@@ -125,7 +128,7 @@ public class MovieTicketBookingApp {
         boolean isTheatreNameAvailable = false;
         ArrayList<Theatre> searchedTheatreList = new ArrayList<>();
         for(Theatre theatre:Retriever.getInstance().getTheatreList()){
-            if(theatre.getName().toLowerCase().contains(theatreName) && theatre.getAddress().getCity().equals(location)) {
+            if(theatre.getName().toLowerCase().contains(theatreName) && theatre.getAddress().getCity().equalsIgnoreCase(location)) {
                 isTheatreNameAvailable = true;
                 System.out.println(String.format("%2d", theatre.getId()) + " " + theatre.getName() + ", " +theatre.getAddress().getBuildingNameAndNumber()+", " + theatre.getAddress().getArea());
                 searchedTheatreList.add(theatre);
@@ -164,7 +167,7 @@ public class MovieTicketBookingApp {
         }
         for (Map.Entry<Movie, ArrayList<Show>> map : movieShows.entrySet()) {
             int lineBreaker = 1;
-            System.out.println("\n"+String.format("%2d", map.getKey().getId()) + " " + map.getKey().getMovieName() + " • " + map.getKey().getLanguage() + " • " + map.getKey().getDimensionType().getDimension());
+            System.out.println(String.format("%2d", map.getKey().getId()) + " " + map.getKey().getMovieName() + " • " + map.getKey().getLanguage() + " • " + map.getKey().getDimensionType().getDimension());
             for (int counter = 0; counter < map.getValue().size(); counter++) {
                 System.out.print(map.getValue().get(counter).getStartTime() + " | ");
                 if (lineBreaker++ % 3 == 0)
@@ -201,7 +204,7 @@ public class MovieTicketBookingApp {
     protected Show selectShowForMovie(Movie selectedMovie,LocalDate showDate,String location){
         LinkedHashMap<Theatre,ArrayList<Show>> theatreShowList = new LinkedHashMap<>();
         for (Theatre theatre : Retriever.getInstance().getTheatreList()) {
-            if (theatre.getMovieList().contains(selectedMovie) && theatre.getAddress().getCity().equals(location)) {
+            if (theatre.getMovieList().contains(selectedMovie) && theatre.getAddress().getCity().equalsIgnoreCase(location)) {
                 ArrayList<Show> shows = theatre.getAvailableShows(selectedMovie,showDate);
                 if(shows.size() != 0)
                     theatreShowList.put(theatre,shows);
@@ -212,7 +215,7 @@ public class MovieTicketBookingApp {
             return null;
         }
         for(Map.Entry<Theatre,ArrayList<Show>> map: theatreShowList.entrySet()){
-            System.out.println("\n"+String.format("%2d",map.getKey().getId())+" "+map.getKey().getName()+", "+map.getKey().getAddress().getArea());
+            System.out.println(String.format("%2d",map.getKey().getId())+" "+map.getKey().getName()+", "+map.getKey().getAddress().getArea());
             int nextLineCounter = 1;
             for(Show show:map.getValue()){
                 System.out.print(show.getStartTime()+" | ");
@@ -220,6 +223,7 @@ public class MovieTicketBookingApp {
                     System.out.println();
                 nextLineCounter++;
             }
+            System.out.println();
         }
         Theatre selectedTheatre;
         System.out.print("\nEnter the number to select the theatre:");

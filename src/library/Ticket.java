@@ -19,8 +19,6 @@ public class Ticket {
    private final String screenName;
    private final LocalTime endTime;
 
-
-
    Ticket(int bookingId, LocalDate showDate,LocalTime showTime, Record<Seat> bookedSeats, double cost, String theatreName, Address theatreAddress, Movie movie, String screenName,LocalTime endTime) {
        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy, hh:mm:a");
        this.bookedTime = LocalDateTime.now().format(formatter);

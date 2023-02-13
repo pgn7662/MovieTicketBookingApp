@@ -53,7 +53,7 @@ public class Screen {
         showsPerDay.get(showDate).remove(show);
     }
 
-    public void addShow(LocalDate date, Show show, Admin admin) {
+    void addShow(LocalDate date, Show show, Admin admin) {
         if (showsPerDay.containsKey(date)) {
             showsPerDay.get(date).add(show);
         } else {

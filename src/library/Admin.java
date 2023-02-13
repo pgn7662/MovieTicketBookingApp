@@ -69,7 +69,7 @@ public class Admin extends User {
                 throw new InvalidShowException("The time you entered is already present in the another screen with this same film");
         }
 
-        if(LocalDate.now().minusDays(7).isBefore(selectedMovie.getReleaseDate()))
+        if(LocalDate.now().isBefore(selectedMovie.getReleaseDate().minusDays(7)))
             throw new InvalidShowException("It is too early to add shows for the movie");
 
         if(showDate.isAfter(LocalDate.now().plusDays(6))){
@@ -83,20 +83,59 @@ public class Admin extends User {
         Collections.sort(theatreScreen.getShowsPerDay().get(showDate));
     }
 
+    public void addMultipleShow(Theatre theatre,ArrayList<Triple<Movie,Double,Integer>> movieList,int numberOfShowsPerDay,LocalDate showDate,LocalTime[] startTimes,int intermissionTime)
+            throws InvalidShowException {
+        if(theatre.getAvailableShows(showDate).size() > 0)
+            throw new InvalidShowException("The theatre has already shows in the selected date");
+        int startTimeCounter = 0;
+        int movieCounter = 0;
+        for(String screenName: theatre.getScreens()){
+            LocalTime showTime = startTimes[startTimeCounter];
+            for(int showCounter = 0 ; showCounter < numberOfShowsPerDay ; showCounter++){
+                Collections.shuffle(movieList);
+                if(movieList.get(movieCounter).getThirdElement() > 0){
+                    try {
+                        addShow(theatre, movieList.get(movieCounter).getFirstElement(), screenName, showDate, showTime, intermissionTime, movieList.get(movieCounter).getSecondElement());
+                    }catch (InvalidShowException e){
+                        theatre.removeAllShows(showDate);
+                        throw new InvalidShowException(e.getMessage());
+                    }
+                    movieList.get(movieCounter).setThirdElement(movieList.get(movieCounter).getThirdElement()-1);
+                    showTime = showTime.plusMinutes(intermissionTime + 20 + movieList.get(movieCounter).getFirstElement().getTotalDuration());
+                    while (showTime.getMinute() % 5 != 0){
+                        showTime = showTime.plusMinutes(1);
+                    }
+                    if(movieCounter < movieList.size()-1){
+                        movieCounter++;
+                    }
+                }
+                else
+                    showCounter--;
+            }
+            startTimeCounter++;
+        }
+    }
+
     public void removeMovieFromTheatre(Movie movie,Theatre theatre) throws InvalidShowException {
         if(!theatre.getMovieList().contains(movie))
             throw new InvalidShowException("The theatre does not have movie in it");
-        for (Screen screen : theatre.getScreens()) {
-            for (Map.Entry<LocalDate, ArrayList<Show>> map : screen.getShowsPerDay().entrySet()) {
-                if (!map.getKey().isBefore(LocalDate.now()) ){
-                    for (Show show : map.getValue()) {
-                        if (show.getMovieShowing().equals(movie) && ((map.getKey().isEqual(LocalDate.now()) && !show.getStartTime().isBefore(LocalTime.now())) || map.getKey().isAfter(LocalDate.now())))
-                            throw new InvalidShowException("The movie you selected is already running in theatres");
-                    }
-                }
-            }
-        }
-        Database.getInstance().removeMovie(movie,this);
+        LocalDate showDate = LocalDate.now();
+        do{
+            if(theatre.getAvailableShows(movie,showDate).size() != 0)
+                throw new InvalidShowException("The movie you selected is already running in theatres");
+            showDate = showDate.plusDays(1);
+        }while (!showDate.equals(LocalDate.now().plusDays(7)));
+//        for (Screen screen : theatre.getScreens()) {
+//            for (Map.Entry<LocalDate, ArrayList<Show>> map : screen.getShowsPerDay().entrySet()) {
+//                if (!map.getKey().isBefore(LocalDate.now()) ){
+//                    for (Show show : map.getValue()) {
+//                        if (show.getMovieShowing().equals(movie) && ((map.getKey().isEqual(LocalDate.now()) && !show.getStartTime().isBefore(LocalTime.now())) || map.getKey().isAfter(LocalDate.now())))
+//                            throw new InvalidShowException("The movie you selected is already running in theatres");
+//                    }
+//                }
+//            }
+//        }
+       theatre.removeMovie(movie,this);
     }
 
     public void removeShow(Show selectedShow,LocalDate showDate) throws InvalidShowException{
@@ -115,16 +154,22 @@ public class Admin extends User {
     }
 
     public void removeTheatre(Theatre theatre) throws InvalidShowException{
-        for(Screen screen : theatre.getScreens()) {
-            for(Map.Entry<LocalDate,ArrayList<Show>> map:screen.getShowsPerDay().entrySet()){
-                if(!map.getKey().isBefore(LocalDate.now())) {
-                    for (Show show : map.getValue()) {
-                        if((!show.getStartTime().isBefore(LocalTime.now()) && map.getKey().isEqual(LocalDate.now())) || map.getKey().isAfter(LocalDate.now()))
-                            throw new InvalidShowException("The theatre has shows running");
-                    }
-                }
-            }
-        }
+        LocalDate showDate = LocalDate.now();
+        do{
+            if(theatre.getAvailableShows(showDate).size() != 0)
+                throw new InvalidShowException("The theatre has shows running");
+            showDate = showDate.plusDays(1);
+        }while (!showDate.equals(LocalDate.now().plusDays(7)));
+//        for(Screen screen : theatre.getScreens()) {
+//            for(Map.Entry<LocalDate,ArrayList<Show>> map:screen.getShowsPerDay().entrySet()){
+//                if(!map.getKey().isBefore(LocalDate.now())) {
+//                    for (Show show : map.getValue()) {
+//                        if((!show.getStartTime().isBefore(LocalTime.now()) && map.getKey().isEqual(LocalDate.now())) || map.getKey().isAfter(LocalDate.now()))
+//                            throw new InvalidShowException("The theatre has shows running");
+//                    }
+//                }
+//            }
+//        }
         Database.getInstance().removeTheatre(theatre,this);
     }
 
@@ -143,10 +188,10 @@ public class Admin extends User {
             throw new InvalidDataException("The theatre is already present with the same name and address");
     }
 
-    public void addScreen(String screenName, Theatre theatre, int numberOfColumns, int numberOfRows) throws InvalidDataException {
-        Screen newScreen = new Screen(screenName,numberOfRows,numberOfColumns);
-        for(Screen screen:theatre.getScreens()){
-            if(screen.getScreenName().replaceAll(" ","").equalsIgnoreCase(screenName.replaceAll(" ","")))
+    public void addScreen(String newScreenName, Theatre theatre, int numberOfColumns, int numberOfRows) throws InvalidDataException {
+        Screen newScreen = new Screen(newScreenName,numberOfRows,numberOfColumns);
+        for(String screenName:theatre.getScreens()){
+            if(screenName.replaceAll(" ","").equalsIgnoreCase(newScreenName.replaceAll(" ","")))
                 throw new InvalidDataException("A screen is already present with the same name");
         }
         theatre.addScreen(newScreen,this);
@@ -163,6 +208,13 @@ public class Admin extends User {
         theatre.removeScreen(screenName,this);
     }
 
+//    private void removeAllShows(Theatre theatre,LocalDate showDate){
+//        for(Screen screen : theatre.getScreens()){
+//            if(screen.getShowsPerDay().get(showDate) != null)
+//                screen.getShowsPerDay().remove(showDate);
+//        }
+//    }
+
     public void initialize() throws InvalidDataException{
         //Movies
 
@@ -176,7 +228,9 @@ public class Admin extends User {
          Record<Genre> thunivuGenre = new  Record<>();
         thunivuGenre.add(Genre.ACTION);
         thunivuGenre.add(Genre.THRILLER);
-        addMovie("Thunivu",thunivuCast,thunivuCrew,145,thunivuGenre,Certificate.UA,Language.TAMIL,DimensionType.TWO_DIMENSION,LocalDate.parse("11-01-2023", DateTimeFormatter.ofPattern("dd-MM-yyyy")),"A bank robbery failure movie");
+        addMovie("Thunivu",thunivuCast,thunivuCrew,145,thunivuGenre,Certificate.UA,
+                Language.TAMIL,DimensionType.TWO_DIMENSION,LocalDate.parse("11-01-2023",
+                        DateTimeFormatter.ofPattern("dd-MM-yyyy")),"A bank robbery failure movie");
 
         //Varisu
          Record<String> varisuCast = new  Record<>();
@@ -189,7 +243,10 @@ public class Admin extends User {
          Record<Genre> varisuGenre = new  Record<>();
         varisuGenre.add(Genre.DRAMA);
         varisuGenre.add(Genre.ACTION);
-        addMovie("Varisu",varisuCast,varisuCrew,170,varisuGenre,Certificate.U,Language.TAMIL,DimensionType.TWO_DIMENSION,LocalDate.parse("11-01-2023", DateTimeFormatter.ofPattern("dd-MM-yyyy")),"A business man's family confusion");
+        addMovie("Varisu",varisuCast,varisuCrew,170,varisuGenre,Certificate.U,
+                Language.TAMIL,DimensionType.TWO_DIMENSION,
+                LocalDate.parse("11-01-2023", DateTimeFormatter.ofPattern("dd-MM-yyyy")),
+                "A business man's family confusion");
 
         //Avatar 2: The Way Of Water
         Record<String> avatarCast = new  Record<>();
@@ -205,7 +262,10 @@ public class Admin extends User {
         avatarGenre.add(Genre.ACTION);
         avatarGenre.add(Genre.ADVENTURE);
         avatarGenre.add(Genre.FANTASY);
-        int avatar2d_tamId = addMovie("Avatar : The Way Of Water",avatarCast,avatarCrew,192,avatarGenre,Certificate.UA,Language.TAMIL,DimensionType.TWO_DIMENSION,LocalDate.parse("16-12-2022", DateTimeFormatter.ofPattern("dd-MM-yyyy")),"A Fantasy world with a beautiful environment");
+        int avatar2d_tamId = addMovie("Avatar : The Way Of Water",avatarCast,avatarCrew,192,
+                avatarGenre,Certificate.UA,Language.TAMIL,DimensionType.TWO_DIMENSION,
+                LocalDate.parse("16-12-2022", DateTimeFormatter.ofPattern("dd-MM-yyyy")),
+                "A Fantasy world with a beautiful environment");
         Movie avatar2d_tam = Retriever.getInstance().getMovie(avatar2d_tamId);
         if(avatar2d_tamId != 0){
             addMovie(avatar2d_tam, Language.TAMIL, DimensionType.THREE_DIMENSION);
@@ -225,8 +285,9 @@ public class Admin extends User {
         michealGenre.add(Genre.ACTION);
         michealGenre.add(Genre.DRAMA);
         michealGenre.add(Genre.THRILLER);
-        addMovie("Micheal",michealCast,michealCrew,155,michealGenre,Certificate.UA,Language.TAMIL,DimensionType.TWO_DIMENSION,LocalDate.parse("03-02-2022", DateTimeFormatter.ofPattern("dd-MM-yyyy")),"A 1990s gangster's life story");
-
+        addMovie("Micheal",michealCast,michealCrew,155,michealGenre,Certificate.UA,
+                Language.TAMIL,DimensionType.TWO_DIMENSION,LocalDate.parse("03-02-2022",
+                        DateTimeFormatter.ofPattern("dd-MM-yyyy")),"A 1990s gangster's life story");
 
         //Run Baby Run
         Record<String> runCast = new Record<>();
@@ -238,8 +299,9 @@ public class Admin extends User {
         Record<Genre> runGenre = new Record<>();
         runGenre.add(Genre.DRAMA);
         runGenre.add(Genre.THRILLER);
-        addMovie("Run Baby Run",runCast,runCrew,133,runGenre,Certificate.UA,Language.TAMIL,DimensionType.TWO_DIMENSION,LocalDate.parse("03-02-2022", DateTimeFormatter.ofPattern("dd-MM-yyyy")),"A thrilling kidnapping story");
-
+        addMovie("Run Baby Run",runCast,runCrew,133,runGenre,Certificate.UA,
+                Language.TAMIL,DimensionType.TWO_DIMENSION, LocalDate.parse("03-02-2022",
+                        DateTimeFormatter.ofPattern("dd-MM-yyyy")),"A thrilling kidnapping story");
 
         //Pathaan
         Record<String> pathaanCast = new Record<>();
@@ -251,16 +313,18 @@ public class Admin extends User {
         Record<Genre> pathaanGenre = new Record<>();
         pathaanGenre.add(Genre.ACTION);
         pathaanGenre.add(Genre.THRILLER);
-        int pathaanId = addMovie("Pathaan",pathaanCast,pathaanCrew,146,pathaanGenre,Certificate.UA,Language.TAMIL,DimensionType.TWO_DIMENSION,LocalDate.parse("25-12-2022", DateTimeFormatter.ofPattern("dd-MM-yyyy")),"A usual bollywood action movie");
+        int pathaanId = addMovie("Pathaan",pathaanCast,pathaanCrew,146,pathaanGenre,
+                Certificate.UA,Language.TAMIL,DimensionType.TWO_DIMENSION,LocalDate.parse("25-12-2022",
+                        DateTimeFormatter.ofPattern("dd-MM-yyyy")),"A usual bollywood action movie");
         Movie pathaanTam = Retriever.getInstance().getMovie(pathaanId);
         if(pathaanId != 0){
             addMovie(pathaanTam, Language.HINDI, DimensionType.TWO_DIMENSION);
         }
 
         //Theatres
-
         //AGS
-        int agsId = addTheatre("AGS Cinemas",new Address("Vivira Mall","Navalur,OMR","Chennai",603103,State.TAMIL_NADU));
+        int agsId = addTheatre("AGS Cinemas",new Address("Vivira Mall",
+                "Navalur,OMR","Chennai",603103,State.TAMIL_NADU));
         if(agsId != 0){
             Theatre ags = Retriever.getInstance().getTheatre(agsId);
             addScreen("SCREEN 1", ags, 15, 18);
@@ -270,7 +334,8 @@ public class Admin extends User {
         }
 
         //Mayajal
-        int mayajalId = addTheatre("MAYAJAL Multiplex",new Address("No 34/1","Kanathur, ECR","Chennai",603112,State.TAMIL_NADU));
+        int mayajalId = addTheatre("MAYAJAL Multiplex",new Address("No 34/1",
+                "Kanathur, ECR","Chennai",603112,State.TAMIL_NADU));
         if(mayajalId != 0){
             Theatre mayajal = Retriever.getInstance().getTheatre(mayajalId);
             addScreen("SCREEN 1", mayajal, 12, 15);
@@ -279,8 +344,10 @@ public class Admin extends User {
             addScreen("SCREEN 4", mayajal, 14, 20);
             addScreen("SCREEN 5", mayajal, 12, 15);
         }
+
         //PVR
-        int pvrId = addTheatre("PVR Cinemas",new Address("No:137, Grand Square Mall","Doctor Seetaram Nagar","Chennai",600042,State.TAMIL_NADU));
+        int pvrId = addTheatre("PVR Cinemas",new Address("No:137, Grand Square Mall",
+                "Doctor Seetaram Nagar","Chennai",600042,State.TAMIL_NADU));
         if(pvrId != 0){
             Theatre pvr = Retriever.getInstance().getTheatre(pvrId);
             addScreen("SCREEN 1", pvr, 12, 15);
@@ -289,7 +356,4 @@ public class Admin extends User {
             addScreen("SCREEN 4", pvr, 14, 20);
         }
     }
-
-
-
 }

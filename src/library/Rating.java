@@ -5,7 +5,7 @@ public class Rating {
     private double totalRating;
 
     Rating(){
-        ratingCount = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        ratingCount = new int[10];
     }
 
     double getTotalRating(){
@@ -14,8 +14,8 @@ public class Rating {
             totalRating += ((counter+1)*ratingCount[counter]);
             totalCount+=ratingCount[counter];
         }
-//        if(totalRating == 0)
-//            return 0;
+        if(totalRating == 0)
+            return 0;
         double rating = totalRating/totalCount;
         totalRating = 0;
         return rating;

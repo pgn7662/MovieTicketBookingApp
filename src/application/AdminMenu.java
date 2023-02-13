@@ -4,6 +4,7 @@ import library.*;
 import library.Record;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 
 public class AdminMenu {
@@ -12,12 +13,10 @@ public class AdminMenu {
     protected void displayAdminMenu(MovieTicketBookingApp app, Admin admin) {
         try {
             admin.initialize();
-        }catch (InvalidDataException e)
-        {
+        }catch (InvalidDataException e) {
             System.out.println("The movies are initialized");
         }
-        loop:
-        while (true) {
+        loop: while (true) {
             System.out.println("1.Movie\n2.Theatre\n3.Logout");
             System.out.print("Enter your choice to select:");
             switch (input.getInteger()) {
@@ -55,13 +54,15 @@ public class AdminMenu {
                         switch (input.getInteger()) {
                             case 1 -> {
                                 while (true) {
+                                    String location = app.selectLocation();
+                                    if(location == null)
+                                        break;
                                     System.out.println("Enter 1 to search a theatre");
                                     System.out.println("Enter any other number to go back");
                                     if (input.getInteger() != 1)
                                         continue loop2;
                                     System.out.print("Enter the theatre name to search:");
                                     String theatreName = input.getString();
-                                    String location = app.selectLocation();
                                     Theatre selectedTheatre = app.searchTheatre(theatreName.toLowerCase(),location);
                                     if (selectedTheatre == null) {
                                         System.out.println("Sorry! No result found");
@@ -71,15 +72,15 @@ public class AdminMenu {
                                     double seatCost = input.getSeatCost();
                                     do {
                                         int counter = 0;
-                                        for (Screen screen : selectedTheatre.getScreens()) {
-                                            System.out.println(++counter + " " + screen.getScreenName());
+                                        for (String screenName : selectedTheatre.getScreens()) {
+                                            System.out.println(++counter + " " + screenName);
                                         }
                                         System.out.print("Select a screen by entering the serial number:");
                                         String screenName;
                                         while (true) {
                                             int index = input.getInteger() - 1;
                                             if (index > -1 && index <= selectedTheatre.getScreens().size() - 1) {
-                                                screenName = selectedTheatre.getScreens().get(index).getScreenName();
+                                                screenName = selectedTheatre.getScreens().get(index);
                                                 break;
                                             }
                                             System.out.print("Enter a valid number from the list:");
@@ -146,6 +147,8 @@ public class AdminMenu {
                                             }
                                         }
                                         String location = app.selectLocation();
+                                        if(location == null)
+                                            break;
                                         Show selectedShow = app.selectShowForMovie(searchedMovie, showDate,location);
                                         if (selectedShow != null) {
                                             System.out.println("Enter 1 to view seats");
@@ -200,14 +203,14 @@ public class AdminMenu {
             Record<String> casts = new Record<>();
             do {
                 System.out.print("Enter the cast member name:");
-                casts.add(input.getString());
+                casts.add(input.getName());
                 System.out.println("Enter 1 to add another cast member");
                 System.out.println("Enter any other number to go to next option");
             } while (input.getInteger() == 1);
             Record<String> crews = new Record<>();
             do {
                 System.out.print("Enter the crew member name:");
-                crews.add(input.getString());
+                crews.add(input.getName());
                 System.out.println("Enter 1 to add another crew member");
                 System.out.println("Enter any other number to go to next option");
             } while (input.getInteger() == 1);
@@ -262,9 +265,11 @@ public class AdminMenu {
                 }
             }
             case 2 -> {
+                String location = app.selectLocation();
+                if(location == null)
+                    return;
                 System.out.print("Enter the theatre name to search:");
                 String theatreName = input.getString();
-                String location = app.selectLocation();
                 Theatre theatre = app.searchTheatre(theatreName.toLowerCase(),location);
                 if (theatre == null)
                     break;
@@ -327,13 +332,15 @@ public class AdminMenu {
                 case 1 -> addTheatre(admin);
                 case 2 -> {
                     while (true) {
+                        String location = app.selectLocation();
+                        if(location == null)
+                            break;
                         System.out.println("Enter 1 to search a theatre");
                         System.out.println("Enter any other number to return");
                         if (input.getInteger() != 1)
                             break;
                         System.out.print("Enter a theatre name:");
                         String theatreName = input.getString();
-                        String location = app.selectLocation();
                         Theatre searchedTheatre = app.searchTheatre(theatreName.toLowerCase(),location);
                         if (searchedTheatre == null) {
                             continue;
@@ -341,7 +348,7 @@ public class AdminMenu {
                         loop3:
                         while (true) {
                             System.out.println(searchedTheatre.getName() + "," + searchedTheatre.getAddress().getBuildingNameAndNumber()+ "," + searchedTheatre.getAddress().getArea());
-                            System.out.println("1.View Shows\n2.Edit Theatre\n3.Remove Theatre\n4.Return");
+                            System.out.println("1.View Shows\n2.Edit Theatre\n3.Remove Theatre\n4.Add Multiple Shows\n5.Return");
                             System.out.print("Enter your choice:");
                             switch (input.getInteger()) {
                                 case 1 -> {
@@ -388,7 +395,8 @@ public class AdminMenu {
                                         System.out.println(e.getMessage()+"\nUnable to remove the theatre");
                                     }
                                 }
-                                case 4 -> {
+                                case 4 -> addMultipleShows(admin,app,searchedTheatre);
+                                case 5 -> {
                                     break loop3;
                                 }
                             }
@@ -398,7 +406,7 @@ public class AdminMenu {
                 case 3 -> {
                     break loop1;
                 }
-                default -> System.out.print("Enter a valid choice:");
+                default -> System.out.println("Enter a valid choice:");
             }
         }
 
@@ -479,14 +487,15 @@ public class AdminMenu {
             case 4 ->{
                 Screen selectedScreen;
                 int screenIndex = 0;
-                for(Screen screen : theatreSelected.getScreens()){
-                    System.out.println(String.format("%2d",++screenIndex)+" "+screen.getScreenName());
+                for(String screenName : theatreSelected.getScreens()){
+                    System.out.println(String.format("%2d",++screenIndex)+" "+screenName);
                 }
                 System.out.print("Enter the serial number to select the screen:");
                 while (true){
                     int choice = input.getInteger() - 1;
                     if (choice < screenIndex && choice >= 0) {
-                        selectedScreen = theatreSelected.getScreens().get(choice);
+                        String selectedScreenName = theatreSelected.getScreens().get(choice);
+                        selectedScreen = theatreSelected.getScreen(selectedScreenName);
                         break;
                     }
                     System.out.print("Enter a valid serial number from the list:");
@@ -500,6 +509,78 @@ public class AdminMenu {
                 }
 
             }
+        }
+    }
+
+    private void addMultipleShows(Admin admin,MovieTicketBookingApp app,Theatre searchedTheatre){
+        ArrayList<Triple<Movie,Double,Integer>> movieList;
+        while (true){
+            movieList = new ArrayList<>();
+            System.out.print("Enter the number of shows per day in each screen:");
+            int numberOfShowsPerDay = input.getInteger();
+            loop: while (true) {
+                System.out.print("Enter the movie name to search:");
+                String movieName = input.getString();
+                Movie searchedMovie = app.searchMovie(movieName.toLowerCase());
+                if (searchedMovie == null)
+                    continue;
+                System.out.print("Enter the cost per seat for the movie:");
+                double costPerSeat = input.getSeatCost();
+                System.out.print("Enter the number of shows per day for the selected movie:");
+                int count = input.getInteger();
+                Triple<Movie,Double,Integer> movieCostGroup = new Triple<>(searchedMovie,costPerSeat,count);
+                for(Triple<Movie,Double,Integer> t : movieList){
+                    if(t.getFirstElement().equals(movieCostGroup.getFirstElement())) {
+                        System.out.println("The movie is already added\nTry to add a different movir");
+                        continue loop;
+                    }
+                }
+                movieList.add(movieCostGroup);
+                System.out.println("Enter 1 to add another movie");
+                System.out.println("Enter any other number to return");
+                if (input.getInteger() != 1)
+                    break;
+            }
+            LocalDate showDate;
+            loop2 : while (true){
+                System.out.print("Enter the show date in the format (dd-mm-yyyy):");
+                showDate = input.getDate();
+                for(Triple<Movie,Double,Integer> t : movieList){
+                    if(t.getFirstElement().getReleaseDate().isAfter(showDate)){
+                        System.out.println("The date you selected is before the release date");
+                        continue loop2;
+                    }
+                }
+                break;
+            }
+            int totalShowsCount = 0;
+            for (Triple<Movie,Double,Integer> t : movieList) {
+                totalShowsCount += t.getThirdElement();
+            }
+            if (totalShowsCount != numberOfShowsPerDay * searchedTheatre.getScreens().size()) {
+                System.out.println("The number of screens and shows per day is not matching with the movie show count");
+                System.out.println("Enter 1 to add movies again");
+                System.out.println("Enter any other number to return");
+                if(input.getInteger() != 1)
+                    return;
+
+                continue;
+            }
+            LocalTime []startTimes = new LocalTime[searchedTheatre.getScreens().size()];
+            for(int counter = 0 ; counter < startTimes.length; counter++){
+                System.out.println("Enter the start time of first show in  "+searchedTheatre.getScreens().get(counter)+" :");
+                startTimes[counter] = input.getTime();
+            }
+            System.out.print("Enter the intermission time:");
+            int intermissionTime = input.getIntermissionTime();
+            try {
+                admin.addMultipleShow(searchedTheatre,movieList,numberOfShowsPerDay,showDate,startTimes,intermissionTime);
+                System.out.println("The shows has been successfully added");
+            }
+            catch (InvalidShowException e){
+                System.out.println(e.getMessage()+"\nUnable to add shows");
+            }
+            break;
         }
     }
 

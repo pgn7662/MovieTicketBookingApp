@@ -28,5 +28,4 @@ public class Authenticator {
         return Database.getInstance().isPhoneNumberAvailable(phoneNumber);
     }
 
-
 }

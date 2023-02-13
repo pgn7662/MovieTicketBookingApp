@@ -22,7 +22,13 @@ public class CustomerMenu {
             System.out.println("Enter 4 to change location");
             System.out.println("Enter 5 to log out");
             switch (input.getInteger()) {
-                case 1 -> bookTicket(app, customer, bookingController,location);
+                case 1 -> {
+                    if (location != null) {
+                        bookTicket(app, customer, bookingController, location);
+                    }
+                    else
+                        System.out.println("Not able to book tickets");
+                }
                 case 2 -> viewMyBookings(customer, bookingController);
                 case 3 -> viewProfile(customer);
                 case 4 -> {
@@ -140,6 +146,10 @@ public class CustomerMenu {
     }
 
     private void viewMyBookings(Customer customer, BookingController bookingController){
+        if(customer.getMyTickets().size() == 0) {
+            System.out.println("No Previous Bookings");
+            return;
+        }
         for(Ticket ticket: customer.getMyTickets())
             System.out.println(ticket.getDetails());
         System.out.print("Enter the id of the ticket to view full details:");
@@ -236,6 +246,10 @@ public class CustomerMenu {
             }
             if(seat!=null && !selectedSeats.contains(seat))
                 selectedSeats.add(seat);
+            else{
+                System.out.println("The seat is already selected by you\nPlease choose a different seat");
+                counter--;
+            }
         }
         return selectedSeats;
     }

@@ -20,7 +20,7 @@ public class Show implements Comparable<Show> {
         this.costPerSeat = costPerSeat;
         this.screenName = screenName;
         this.theatreId = theatreId;
-        this.endTime = startTime.plusMinutes(movieShowing.getTotalDuration()+this.intermissionTime+20);
+        this.endTime = startTime.plusMinutes(movieShowing.getTotalDuration()+this.intermissionTime);
         this.bookedSeats = new Record<>();
     }
 
@@ -68,6 +68,7 @@ public class Show implements Comparable<Show> {
             return 1;
         return 0;
     }
+
 
 }
 

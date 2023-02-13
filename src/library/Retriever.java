@@ -25,8 +25,8 @@ public class Retriever {
     public Record<String> getTheatreLocations(){
         Record<String> locations = new Record<>();
         for(Theatre theatre: getTheatreList()){
-            if(!locations.contains(theatre.getAddress().getCity()))
-                locations.add(theatre.getAddress().getCity());
+            if(!locations.contains(theatre.getAddress().getCity().toLowerCase()))
+                locations.add(theatre.getAddress().getCity().toLowerCase());
         }
         return locations;
     }

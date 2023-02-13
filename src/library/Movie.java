@@ -60,7 +60,7 @@ public class Movie implements Comparable<Movie>{
     public LocalDate getReleaseDate() {
         return releaseDate;
     }
-    public int getTotalDuration() {
+    int getTotalDuration() {
         return totalDuration;
     }
 
@@ -81,7 +81,7 @@ public class Movie implements Comparable<Movie>{
         return "\n"+movieName.toUpperCase()+"\n"+
                 dimensionType.getDimension()+" | "+language+"\n"+
                 totalDuration+" minutes • "+ genreList+" • "+certificate+" • "+releaseDate+"\n"+
-                (rating.getTotalRating() != 0 ?(rating.getTotalRating()+" / 10 \n"):" ")+
+                (rating.getTotalRating() != 0 ?(String.format("%.2f",rating.getTotalRating()) +" / 10 \n"):" ")+
                 synopsis+"\n"+
                 "Cast\n"+
                 castList+"\n"+

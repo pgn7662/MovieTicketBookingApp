@@ -81,7 +81,7 @@ public class Customer extends User {
     public void setPhoneNumber(long phoneNumber) throws InvalidDataException{
         if(phoneNumber == this.phoneNumber)
             throw new InvalidDataException("The phone number is same as the old phone number");
-        else if(Database.getInstance().isPhoneNumberAvailable(phoneNumber)){
+        else if(!Database.getInstance().isPhoneNumberAvailable(phoneNumber)){
             throw new InvalidDataException("The phone number is not available");
         }
         this.phoneNumber = phoneNumber;
@@ -90,7 +90,7 @@ public class Customer extends User {
     public void setEmailAddress(String emailAddress) throws InvalidDataException {
         if(emailAddress.equals(this.emailAddress))
             throw new InvalidDataException("The email is same as the old email");
-        else if(Database.getInstance().isEmailAvailable(emailAddress)){
+        else if(!Database.getInstance().isEmailAvailable(emailAddress)){
             throw new InvalidDataException("The email is not available");
         }
         this.emailAddress = emailAddress;
